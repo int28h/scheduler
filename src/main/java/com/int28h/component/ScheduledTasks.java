@@ -2,7 +2,11 @@ package com.int28h.component;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,16 +19,22 @@ public class ScheduledTasks {
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     
     Connection connection = null;
+    
+    ArrayList<String> emails = new ArrayList<>();
 
-    //@Scheduled("0 0 17 * * MON-FRI")
-	@Scheduled(fixedRate = 10000)
+    //@Scheduled(fixedRate = 60000)
+	@Scheduled("0 0 17 * * MON-FRI")	
     public void sendEmails() {
 		connect();
+		selectEmails();
 		
-		
-		RestTemplate restTemplate = new RestTemplate();
-        String emailSendResult = restTemplate.getForObject("http://localhost:8080/sendMail?email=" + email, String.class);
-        log.info(emailSendResult);
+		if(!emails.isEmpty()){
+			for(String email : emails) {
+				RestTemplate restTemplate = new RestTemplate();
+		        String emailSendResult = restTemplate.getForObject("http://localhost:8080/sendMail?email=" + email, String.class);
+		        log.info(emailSendResult);
+			}
+		}
         
         try {
         	if (connection != null) {
@@ -36,6 +46,22 @@ public class ScheduledTasks {
         }
     }
 	
+	private void selectEmails() {
+		String sqlSelect = "SELECT email FROM emails";
+		
+		try (Connection connection = this.connection;
+				Statement statement = connection.createStatement();
+				ResultSet rs = statement.executeQuery(sqlSelect)) {
+			while(rs.next()) {
+				emails.add(rs.getString("email"));
+			}
+			log.info("Emails were received.");
+		} catch (SQLException e) {			
+			log.error("Emails weren't received.");
+			e.printStackTrace();
+		}
+	}
+
 	private void connect() {        
         try {
         	String url = "jdbc:sqlite:C:/sqlite/test.db";
