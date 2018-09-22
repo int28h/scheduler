@@ -17,14 +17,14 @@ import com.int28h.component.ScheduledTasks;
 public class DatabaseController {
 	private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
 	
-    Connection connection = null;
+	Connection connection = null;
 	
 	@RequestMapping("/showEmails")
-    public String showEmails() {
+	public String showEmails() {
 		StringBuilder emails = new StringBuilder();
 		
-		connect();    	
-    	String sql = "SELECT email FROM emails";
+		connect();
+		String sql = "SELECT email FROM emails";
 		
 		try (Connection connection = this.connection;
 				Statement statement = connection.createStatement();
@@ -42,16 +42,16 @@ public class DatabaseController {
 	}
 	
 	@RequestMapping("/deleteMail")
-    public String deleteMail(@RequestParam(value="email", defaultValue="null") String email) {
+    	public String deleteMail(@RequestParam(value="email", defaultValue="null") String email) {
 		connect();
-    	String sql = "DELETE FROM emails WHERE email = ?";
+    		String sql = "DELETE FROM emails WHERE email = ?";
     	
 		try (Connection connection = this.connection;
-				PreparedStatement prStatement = connection.prepareStatement(sql)){
-					prStatement.setString(1, email);
-					prStatement.executeUpdate();
-					return ("Email " + email + " was deleted from the database.");
-				} catch (SQLException e) {
+		     PreparedStatement prStatement = connection.prepareStatement(sql)){
+			prStatement.setString(1, email);
+			prStatement.executeUpdate();
+			return ("Email " + email + " was deleted from the database.");
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
@@ -61,16 +61,16 @@ public class DatabaseController {
 	}
 	
 	@RequestMapping("/addMail")
-    public String addMail(@RequestParam(value="email", defaultValue="null") String email) {
+    	public String addMail(@RequestParam(value="email", defaultValue="null") String email) {
 		connect();    	
-    	String sql = "INSERT INTO emails (email) VALUES (?)";
+    		String sql = "INSERT INTO emails (email) VALUES (?)";
     	
 		try (Connection connection = this.connection;
-				PreparedStatement prStatement = connection.prepareStatement(sql)){
-					prStatement.setString(1, email);
-					prStatement.executeUpdate();
-					return ("Email " + email + " was added to the database.");
-				} catch (SQLException e) {
+		     PreparedStatement prStatement = connection.prepareStatement(sql)){
+			prStatement.setString(1, email);
+			prStatement.executeUpdate();
+			return ("Email " + email + " was added to the database.");
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
@@ -82,12 +82,12 @@ public class DatabaseController {
 	private void connect() {
 		try {
 			String url = "jdbc:sqlite:C:/sqlite/test.db";
-            this.connection = DriverManager.getConnection(url);            
-            log.info("Connection to SQLite has been established.");
-        } catch (SQLException e) {
+            		this.connection = DriverManager.getConnection(url);            
+            		log.info("Connection to SQLite has been established.");
+		} catch (SQLException e) {
 			log.error("Connection to SQLite hasn't been established.");
-        }
-    }
+		}
+	}
 	
 	private void disconnect() {        
 		try {
