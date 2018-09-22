@@ -21,7 +21,7 @@ public class MailController {
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
         try {
-        	helper.setFrom("TEST@gmail.com");
+			helper.setFrom("TEST@gmail.com");
             helper.setTo(sendTo);
             helper.setText("Пх’нглуи мглв’нафх Ктулху Р’льех вгах’нагл фхтагн!");
             helper.setSubject("Mail From Spring Boot");

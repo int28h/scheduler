@@ -1,0 +1,1 @@
+Формат БД: таблица `emails`, состоящая из двух колонок - `email_id` (INTEGER PRIMARY KEY AUTOINCREMENT) и `email' (VARCHAR NOT NULL).  

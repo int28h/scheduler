@@ -15,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class ScheduledTasks {
-
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     
     Connection connection = null;
@@ -23,10 +22,10 @@ public class ScheduledTasks {
     ArrayList<String> emails = new ArrayList<>();
 
     //@Scheduled(fixedRate = 60000)
-	@Scheduled("0 0 17 * * MON-FRI")	
+	@Scheduled(cron = "0 0 17 * * MON-FRI")	
     public void sendEmails() {
 		connect();
-		selectEmails();
+		getEmails();
 		
 		if(!emails.isEmpty()){
 			for(String email : emails) {
@@ -34,6 +33,7 @@ public class ScheduledTasks {
 		        String emailSendResult = restTemplate.getForObject("http://localhost:8080/sendMail?email=" + email, String.class);
 		        log.info(emailSendResult);
 			}
+			emails.clear();
 		}
         
         try {
@@ -46,7 +46,7 @@ public class ScheduledTasks {
         }
     }
 	
-	private void selectEmails() {
+	private void getEmails() {
 		String sqlSelect = "SELECT email FROM emails";
 		
 		try (Connection connection = this.connection;
@@ -64,7 +64,7 @@ public class ScheduledTasks {
 
 	private void connect() {        
         try {
-        	String url = "jdbc:sqlite:C:/sqlite/test.db";
+			String url = "jdbc:sqlite:C:/sqlite/test.db";
             this.connection = DriverManager.getConnection(url);            
             log.info("Connection to SQLite has been established.");
         } catch (SQLException e) {
