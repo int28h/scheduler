@@ -21,29 +21,21 @@ public class ScheduledTasks {
     
     ArrayList<String> emails = new ArrayList<>();
 
-    //@Scheduled(fixedRate = 60000)
 	@Scheduled(cron = "0 0 17 * * MON-FRI")	
     public void sendEmails() {
-		connect();
-		getEmails();
+    	connect();
+		getEmails();		
 		
 		if(!emails.isEmpty()){
 			for(String email : emails) {
 				RestTemplate restTemplate = new RestTemplate();
-		        String emailSendResult = restTemplate.getForObject("http://localhost:8080/sendMail?email=" + email, String.class);
-		        log.info(emailSendResult);
+		        String emailSend = restTemplate.getForObject("http://localhost:8080/sendMail?email=" + email, String.class);
+		        log.info(emailSend);
 			}
 			emails.clear();
 		}
         
-        try {
-        	if (connection != null) {
-                connection.close();
-                log.info("Connection to SQLite has been closed.");
-            }
-        } catch (SQLException ex) {
-        	log.info("Connection to SQLite hasn't been closed.");
-        }
+        disconnect();
     }
 	
 	private void getEmails() {
@@ -55,9 +47,9 @@ public class ScheduledTasks {
 			while(rs.next()) {
 				emails.add(rs.getString("email"));
 			}
-			log.info("Emails were received.");
+			log.info("Emails were received from the database.");
 		} catch (SQLException e) {			
-			log.error("Emails weren't received.");
+			log.error("Emails weren't received from the database.");
 			e.printStackTrace();
 		}
 	}
@@ -69,6 +61,17 @@ public class ScheduledTasks {
             log.info("Connection to SQLite has been established.");
         } catch (SQLException e) {
         	log.error("Connection to SQLite hasn't been established.");
+        }
+    }
+	
+	private void disconnect() {        
+		try {
+        	if (connection != null) {
+                connection.close();
+                log.info("Connection to SQLite has been closed.");
+            }
+        } catch (SQLException ex) {
+        	log.error("Connection to SQLite hasn't been closed.");
         }
     }
 }
