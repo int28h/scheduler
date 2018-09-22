@@ -15,35 +15,35 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class ScheduledTasks {
-    private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+	private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     
-    Connection connection = null;
+    	Connection connection = null;
     
-    ArrayList<String> emails = new ArrayList<>();
+    	ArrayList<String> emails = new ArrayList<>();
 
 	@Scheduled(cron = "0 0 17 * * MON-FRI")	
-    public void sendEmails() {
-    	connect();
+   	 public void sendEmails() {
+    		connect();
 		getEmails();		
 		
 		if(!emails.isEmpty()){
 			for(String email : emails) {
 				RestTemplate restTemplate = new RestTemplate();
-		        String emailSend = restTemplate.getForObject("http://localhost:8080/sendMail?email=" + email, String.class);
-		        log.info(emailSend);
+				String emailSend = restTemplate.getForObject("http://localhost:8080/sendMail?email=" + email, String.class);
+		        	log.info(emailSend);
 			}
 			emails.clear();
 		}
         
-        disconnect();
-    }
+        	disconnect();
+    	}
 	
 	private void getEmails() {
 		String sqlSelect = "SELECT email FROM emails";
 		
 		try (Connection connection = this.connection;
-				Statement statement = connection.createStatement();
-				ResultSet rs = statement.executeQuery(sqlSelect)) {
+		     Statement statement = connection.createStatement();
+		     ResultSet rs = statement.executeQuery(sqlSelect)) {
 			while(rs.next()) {
 				emails.add(rs.getString("email"));
 			}
@@ -55,23 +55,23 @@ public class ScheduledTasks {
 	}
 
 	private void connect() {        
-        try {
+        	try {
 			String url = "jdbc:sqlite:C:/sqlite/test.db";
-            this.connection = DriverManager.getConnection(url);            
-            log.info("Connection to SQLite has been established.");
-        } catch (SQLException e) {
-        	log.error("Connection to SQLite hasn't been established.");
-        }
-    }
+            		this.connection = DriverManager.getConnection(url);            
+            		log.info("Connection to SQLite has been established.");
+        	} catch (SQLException e) {
+        		log.error("Connection to SQLite hasn't been established.");
+        	}
+	}
 	
 	private void disconnect() {        
 		try {
-        	if (connection != null) {
-                connection.close();
-                log.info("Connection to SQLite has been closed.");
-            }
-        } catch (SQLException ex) {
-        	log.error("Connection to SQLite hasn't been closed.");
-        }
-    }
+        		if (connection != null) {
+				connection.close();
+				log.info("Connection to SQLite has been closed.");
+            		}
+        	} catch (SQLException ex) {
+        		log.error("Connection to SQLite hasn't been closed.");
+        	}
+    	}
 }
