@@ -12,23 +12,23 @@ import javax.mail.internet.MimeMessage;
 
 @RestController
 public class MailController {
-    @Autowired
-    private JavaMailSender sender;
+	@Autowired
+	private JavaMailSender sender;
+	
+	@RequestMapping("/sendMail")
+    	public String sendMail(@RequestParam(value="email", defaultValue="null") String sendTo) {
+        	MimeMessage message = sender.createMimeMessage();
+        	MimeMessageHelper helper = new MimeMessageHelper(message);
 
-    @RequestMapping("/sendMail")
-    public String sendMail(@RequestParam(value="email", defaultValue="null") String sendTo) {
-        MimeMessage message = sender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        try {
+        	try {
 			helper.setFrom("TEST@gmail.com");
-            helper.setTo(sendTo);
-            helper.setText("Пх’нглуи мглв’нафх Ктулху Р’льех вгах’нагл фхтагн!");
-            helper.setSubject("Mail From Spring Boot");
-        } catch (MessagingException e) {
-            return("Mail to " + sendTo + " wasn't sent.");
-        }
-        sender.send(message);
-        return("Mail to " + sendTo + " was sent.");
-    }
+            		helper.setTo(sendTo);
+           		helper.setText("Пх’нглуи мглв’нафх Ктулху Р’льех вгах’нагл фхтагн!");
+            		helper.setSubject("Mail From Spring Boot");
+        	} catch (MessagingException e) {
+			return("Mail to " + sendTo + " wasn't sent.");
+        	}
+        	sender.send(message);
+        	return("Mail to " + sendTo + " was sent.");
+    	}
 }
