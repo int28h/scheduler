@@ -41,13 +41,13 @@ public class DatabaseController {
 		return emails.toString();
 	}
 	
-	@RequestMapping("/deleteMail")
-    	public String deleteMail(@RequestParam(value="email", defaultValue="null") String email) {
-		connect();
+	@RequestMapping("/deleteEmail")
+    	public String deleteEmail(@RequestParam(value="email", defaultValue="null") String email) {
+			connect();
     		String sql = "DELETE FROM emails WHERE email = ?";
     	
 		try (Connection connection = this.connection;
-		     PreparedStatement prStatement = connection.prepareStatement(sql)){
+		    PreparedStatement prStatement = connection.prepareStatement(sql)){
 			prStatement.setString(1, email);
 			prStatement.executeUpdate();
 			return ("Email " + email + " was deleted from the database.");
@@ -60,13 +60,13 @@ public class DatabaseController {
 		return ("Email " + email + " wasn't deleted from the database.");
 	}
 	
-	@RequestMapping("/addMail")
-    	public String addMail(@RequestParam(value="email", defaultValue="null") String email) {
+	@RequestMapping("/addEmail")
+    	public String addEmail(@RequestParam(value="email", defaultValue="null") String email) {
 		connect();    	
     		String sql = "INSERT INTO emails (email) VALUES (?)";
     	
 		try (Connection connection = this.connection;
-		     PreparedStatement prStatement = connection.prepareStatement(sql)){
+		    PreparedStatement prStatement = connection.prepareStatement(sql)){
 			prStatement.setString(1, email);
 			prStatement.executeUpdate();
 			return ("Email " + email + " was added to the database.");
@@ -81,9 +81,9 @@ public class DatabaseController {
 
 	private void connect() {
 		try {
-			String url = "jdbc:sqlite:C:/sqlite/test.db";
-            		this.connection = DriverManager.getConnection(url);            
-            		log.info("Connection to SQLite has been established.");
+			String url = "jdbc:sqlite:test.db";
+			this.connection = DriverManager.getConnection(url);
+			log.info("Connection to SQLite has been established.");
 		} catch (SQLException e) {
 			log.error("Connection to SQLite hasn't been established.");
 		}
