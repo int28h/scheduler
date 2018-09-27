@@ -34,9 +34,9 @@ public class DatabaseController {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			disconnect();
 		}
-		
-		disconnect();
 		
 		return emails.toString();
 	}
@@ -53,9 +53,9 @@ public class DatabaseController {
 			return ("Email " + email + " was deleted from the database.");
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			disconnect();
 		}
-		
-		disconnect();
 		
 		return ("Email " + email + " wasn't deleted from the database.");
 	}
@@ -72,9 +72,9 @@ public class DatabaseController {
 			return ("Email " + email + " was added to the database.");
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			disconnect();
 		}
-		
-		disconnect();
 		
 		return ("Email " + email + " was added to the database.");
 	}
