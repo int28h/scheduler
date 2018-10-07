@@ -38,6 +38,6 @@
    Отправляет письмо на указанный email c прописанным в [контроллере](src/main/java/com/int28h/controller/MailController.java) текстом.  
     
    **Параметры:**    
-   *email:* адрес электронной почты, на который будет отправлено письмо.  
+   *email:* адрес электронной почты, на который будет отправлено письмо. Строка.  
    **Пример запроса:** `http://localhost:8080/sendMail?email=test3@mail.ru`  
    **Пример ответа:** `Mail to test3@mail.ru  was sent.`  
