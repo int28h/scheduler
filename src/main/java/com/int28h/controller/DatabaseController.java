@@ -42,7 +42,7 @@ public class DatabaseController {
 	}
 	
 	@RequestMapping("/deleteEmail")
-    	public String deleteEmail(@RequestParam(value="email", defaultValue="null") String email) {
+    	public String deleteEmail(@RequestParam(value="email") String email) {
 			connect();
     		String sql = "DELETE FROM emails WHERE email = ?";
     	
@@ -61,7 +61,7 @@ public class DatabaseController {
 	}
 	
 	@RequestMapping("/addEmail")
-    	public String addEmail(@RequestParam(value="email", defaultValue="null") String email) {
+    	public String addEmail(@RequestParam(value="email") String email) {
 		connect();    	
     		String sql = "INSERT INTO emails (email) VALUES (?)";
     	

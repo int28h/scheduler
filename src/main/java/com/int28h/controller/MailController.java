@@ -16,7 +16,7 @@ public class MailController {
 	private JavaMailSender sender;
 	
 	@RequestMapping("/sendMail")
-    	public String sendMail(@RequestParam(value="email", defaultValue="null") String sendTo) {
+    	public String sendMail(@RequestParam(value="email") String sendTo) {
         	MimeMessage message = sender.createMimeMessage();
         	MimeMessageHelper helper = new MimeMessageHelper(message);
 
